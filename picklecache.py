@@ -27,18 +27,20 @@ class PickleCache(object):
 
     def __getitem__(self, key):
         """This function tests whether key exist in file dictionary."""
-        if self.autosync is True:
-            self.flush()
         try:
-            self.__data[key]
+            if self.__data[key]:
+                return self.__data[key]
         except (TypeError, KeyError) as errors:
             raise errors
+        if self.autosync == True:
+            self.flush()
 
     def __delitem__(self, key):
         """This function deletes dictionary by key."""
-        if self.autosync is True:
+        if self.__data[key]:
+            del self.__data[key]
+        if self.autosync == True:
             self.flush()
-        del self.__data[key]
 
     def load(self):
         """This function reads and tests pickle file, and loads it into
