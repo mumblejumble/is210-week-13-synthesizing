@@ -19,6 +19,8 @@ class PickleCache(object):
     def __setitem__(self, key, value):
         """This function creates or updates dictionary dataset."""
         self.__data[key] = value
+        if self.autosync is True:
+            self.flush()
 
     def __len__(self):
         """This function measures length of data."""
@@ -32,14 +34,12 @@ class PickleCache(object):
                 return self.__data[key]
         except (TypeError, KeyError) as errors:
             raise errors
-        if self.autosync == True:
-            self.flush()
 
     def __delitem__(self, key):
         """This function deletes dictionary by key."""
         if self.__data[key]:
             del self.__data[key]
-        if self.autosync == True:
+        if self.autosync is True:
             self.flush()
 
     def load(self):
